@@ -10,12 +10,12 @@ import (
 	"strings"
 )
 
-type CsvDictReader struct {
+type DictReader struct {
 	cReader *csv.Reader
 	header  []string
 }
 
-func NewCsvDictReader(r io.Reader) *CsvDictReader {
+func NewDictReader(r io.Reader) *DictReader {
 	cr := csv.NewReader(r)
 	h, err := cr.Read()
 	if err != nil {
@@ -23,13 +23,13 @@ func NewCsvDictReader(r io.Reader) *CsvDictReader {
 		os.Exit(1)
 	}
 
-	return &CsvDictReader{
+	return &DictReader{
 		cReader: cr,
 		header:  h,
 	}
 }
 
-func (d *CsvDictReader) Read() (csvMap map[string]string, err error) {
+func (d *DictReader) Read() (csvMap map[string]string, err error) {
 	csvMap = make(map[string]string)
 	line, err := d.cReader.Read()
 	if err == io.EOF {
@@ -44,32 +44,32 @@ func (d *CsvDictReader) Read() (csvMap map[string]string, err error) {
 	return csvMap, err
 }
 
-func (d *CsvDictReader) GetHeaderRow() (header []string) {
+func (d *DictReader) GetHeaderRow() (header []string) {
 	return d.header
 }
 
-type CsvDictWriter struct {
+type DictWriter struct {
 	cWriter *csv.Writer
 	header  []string
 }
 
-func NewCsvDictWriter(w io.Writer, h []string) *CsvDictWriter {
+func NewDictWriter(w io.Writer, h []string) *DictWriter {
 
-	return &CsvDictWriter{
+	return &DictWriter{
 		cWriter: csv.NewWriter(w),
 		header:  h,
 	}
 }
 
-func (w *CsvDictWriter) Flush() {
+func (w *DictWriter) Flush() {
 	w.cWriter.Flush()
 }
 
-func (w *CsvDictWriter) WriteHeaders() {
+func (w *DictWriter) WriteHeaders() {
 	w.cWriter.Write(w.header)
 }
 
-func (w *CsvDictWriter) Write(csvMap map[string]string) {
+func (w *DictWriter) Write(csvMap map[string]string) {
 	var newLine []string
 	for _, field := range w.header {
 		newLine = append(newLine, csvMap[field])
