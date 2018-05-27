@@ -44,6 +44,10 @@ func (d *CsvDictReader) Read() (csvMap map[string]string, err error) {
 	return csvMap, err
 }
 
+func (d *CsvDictReader) GetHeaderRow() (header []string) {
+	return d.header
+}
+
 type CsvDictWriter struct {
 	cWriter *csv.Writer
 	header  []string
@@ -57,20 +61,20 @@ func NewCsvDictWriter(w io.Writer, h []string) *CsvDictWriter {
 	}
 }
 
-func (d *CsvDictReader) GetHeaderRow() (header []string) {
-	return d.header
+func (w *CsvDictWriter) Flush() {
+	w.cWriter.Flush()
 }
 
-func (d *CsvDictWriter) WriteHeaders() {
-	d.cWriter.Write(d.header)
+func (w *CsvDictWriter) WriteHeaders() {
+	w.cWriter.Write(w.header)
 }
 
-func (d *CsvDictWriter) Write(csvMap map[string]string) {
+func (w *CsvDictWriter) Write(csvMap map[string]string) {
 	var newLine []string
-	for _, field := range d.header {
+	for _, field := range w.header {
 		newLine = append(newLine, csvMap[field])
 	}
-	err := d.cWriter.Write(newLine)
+	err := w.cWriter.Write(newLine)
 	if err != nil {
 		fmt.Println("I had trouble writing to file. Are permissions correct?")
 		os.Exit(1)
