@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// Basic reader
 type DictReader struct {
 	cReader *csv.Reader
 	header  []string
@@ -19,7 +20,7 @@ func NewDictReader(r io.Reader) *DictReader {
 	cr := csv.NewReader(r)
 	h, err := cr.Read()
 	if err != nil {
-		fmt.Println("I had trouble reading the header row")
+		fmt.Println("I had trouble reading the header row. Is the file in the correct format?")
 		os.Exit(1)
 	}
 
@@ -69,14 +70,14 @@ func (w *DictWriter) WriteHeaders() {
 	w.cWriter.Write(w.header)
 }
 
-func (w *DictWriter) Write(csvMap map[string]string) {
+func (w *DictWriter) Write(csvMap map[string]string) error {
 	var newLine []string
 	for _, field := range w.header {
 		newLine = append(newLine, csvMap[field])
 	}
 	err := w.cWriter.Write(newLine)
 	if err != nil {
-		fmt.Println("I had trouble writing to file. Are permissions correct?")
-		os.Exit(1)
+		return err
 	}
+	return err
 }
