@@ -1,5 +1,7 @@
 package csvdict
 
+// csvdict implements a dictionary reader for CSV files
+
 import (
 	"encoding/csv"
 	"fmt"
