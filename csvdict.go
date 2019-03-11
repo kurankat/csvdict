@@ -10,12 +10,14 @@ import (
 	"strings"
 )
 
-// Basic reader
+// DictReader contains a reference to a CSV reader and a header row slice, used to map
+// each CSV row to its headers
 type DictReader struct {
 	cReader *csv.Reader
 	header  []string
 }
 
+// NewDictReader takes an io.Reader as an argument and returns a reference to a DictReader
 func NewDictReader(r io.Reader) *DictReader {
 	cr := csv.NewReader(r)
 	h, err := cr.Read()
@@ -30,6 +32,7 @@ func NewDictReader(r io.Reader) *DictReader {
 	}
 }
 
+// Read reads a single line of a CSV file and returns a map where each field is mapped to its header
 func (d *DictReader) Read() (csvMap map[string]string, err error) {
 	csvMap = make(map[string]string)
 	line, err := d.cReader.Read()
@@ -45,15 +48,19 @@ func (d *DictReader) Read() (csvMap map[string]string, err error) {
 	return csvMap, err
 }
 
+// GetHeaderRow returns the header row of the DictReader object
 func (d *DictReader) GetHeaderRow() (header []string) {
 	return d.header
 }
 
+// DictWriter contains a reference to a CSV Writer object and a header row slice
 type DictWriter struct {
 	cWriter *csv.Writer
 	header  []string
 }
 
+// NewDictWriter takes an io.Writer and a slice containing the header row
+// as arguments and returns a reference to a DictWriter
 func NewDictWriter(w io.Writer, h []string) *DictWriter {
 
 	return &DictWriter{
@@ -62,14 +69,18 @@ func NewDictWriter(w io.Writer, h []string) *DictWriter {
 	}
 }
 
+// Flush ensures that the writer is flushed to file
 func (w *DictWriter) Flush() {
 	w.cWriter.Flush()
 }
 
+// WriteHeaders writes the header row to file
 func (w *DictWriter) WriteHeaders() {
 	w.cWriter.Write(w.header)
 }
 
+// Write takes a map with headers as indices and field contents as values, and writes it
+// to file as CSV
 func (w *DictWriter) Write(csvMap map[string]string) error {
 	var newLine []string
 	for _, field := range w.header {
