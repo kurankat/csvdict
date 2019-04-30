@@ -110,3 +110,16 @@ func (w *DictWriter) Write(csvMap map[string]string) error {
 	}
 	return err
 }
+
+// WriteAll writes multiple CSV records to w using Write and then calls Flush.
+func (w *DictWriter) WriteAll(records []map[string]string) error {
+	for _, record := range records {
+		err := w.Write(record)
+		if err != nil {
+			return err
+		}
+	}
+
+	w.cWriter.Flush()
+	return w.cWriter.Error()
+}
