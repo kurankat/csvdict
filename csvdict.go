@@ -1,4 +1,4 @@
-// Package csvdict is a Short Go library that extends encoding/csv to handle importing CSV content with headers as a map
+// Package csvdict is a Short Go library that extends encoding/csv to handle importing CSV content with headers as a map (dictionary)
 package csvdict
 
 // csvdict implements a dictionary reader for CSV files
@@ -47,6 +47,23 @@ func (d *DictReader) Read() (csvMap map[string]string, err error) {
 	}
 
 	return csvMap, err
+}
+
+// ReadAll reads all the remaining records from r. Each record is a map of fields.
+// A successful call returns err == nil, not err == io.EOF. Because ReadAll is defined
+// to read until EOF, it does not treat end of file as an error to be reported.
+func (d *DictReader) ReadAll() (records []map[string]string, err error) {
+	for {
+		record, err := d.Read()
+		if err == io.EOF {
+			return records, nil
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record)
+	}
 }
 
 // GetHeaderRow returns the header row of the DictReader object
