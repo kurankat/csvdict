@@ -1,3 +1,4 @@
+// Package csvdict is a Short Go library that extends encoding/csv to handle importing CSV content with headers as a map
 package csvdict
 
 // csvdict implements a dictionary reader for CSV files
