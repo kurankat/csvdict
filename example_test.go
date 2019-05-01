@@ -10,7 +10,7 @@ import (
 	"github.com/kurankat/csvdict"
 )
 
-func exampleDictReader() {
+func ExampleDictReader() {
 	in := `name, age, occupation
 "Mark Smith",33,"Jack of all trades"
 "Douglas Adams",42,Writer
@@ -36,7 +36,7 @@ Methuselah,969,Patriarch
 	// map[name:Methuselah  age:969  occupation:Patriarch]
 }
 
-func ExamplDictReader_ReadAll() {
+func ExampleDictReader_ReadAll() {
 	in := `name, age, occupation
 "Mark Smith",33,"Jack of all trades"
 "Douglas Adams",42,Writer
