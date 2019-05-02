@@ -84,6 +84,8 @@ func ExampleDictWriter() {
 
 	w := csvdict.NewDictWriter(os.Stdout, headers)
 
+	w.WriteHeaders()
+
 	for _, record := range records {
 		err := w.Write(record)
 		if err != nil {
@@ -93,6 +95,7 @@ func ExampleDictWriter() {
 
 	w.Flush()
 	// Output:
+	// name,age,occupation
 	// Mark Smith,33,Jack of all trades
 	// Douglas Adams,42,Writer
 	// Methuselah,969,Patriarch
@@ -113,6 +116,7 @@ func ExampleDictWriter_WriteAll() {
 		panic(err)
 	}
 	// Output:
+	// name,age,occupation
 	// Mark Smith,33,Jack of all trades
 	// Douglas Adams,42,Writer
 	// Methuselah,969,Patriarch

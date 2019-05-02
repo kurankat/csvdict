@@ -111,6 +111,7 @@ func (w *DictWriter) Write(csvMap map[string]string) error {
 
 // WriteAll writes multiple CSV records to w using Write and then calls Flush.
 func (w *DictWriter) WriteAll(records []map[string]string) error {
+	w.WriteHeaders()
 	for _, record := range records {
 		err := w.Write(record)
 		if err != nil {
