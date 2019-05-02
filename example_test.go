@@ -17,7 +17,10 @@ func ExampleDictReader() {
 Methuselah,969,Patriarch
 `
 
-	r := csvdict.NewDictReader(strings.NewReader(in))
+	r, err := csvdict.NewDictReader(strings.NewReader(in))
+	if err != nil {
+		panic(err)
+	}
 
 	for {
 		record, err := r.Read()
@@ -43,7 +46,10 @@ func ExampleDictReader_ReadAll() {
 Methuselah,969,Patriarch
 `
 
-	r := csvdict.NewDictReader(strings.NewReader(in))
+	r, err := csvdict.NewDictReader(strings.NewReader(in))
+	if err != nil {
+		panic(err)
+	}
 
 	records, err := r.ReadAll()
 	if err != nil {
