@@ -22,6 +22,8 @@ Methuselah,969,Patriarch
 		panic(err)
 	}
 
+	headers := r.GetHeaderRow()
+
 	for {
 		record, err := r.Read()
 		if err == io.EOF {
@@ -31,12 +33,14 @@ Methuselah,969,Patriarch
 			log.Fatal(err)
 		}
 
-		fmt.Println(record)
+		fmt.Printf("%v:%v %v:%v %v:%v\n", headers[0], record[headers[0]],
+			headers[1], record[headers[1]],
+			headers[2], record[headers[2]])
 	}
 	// Output:
-	// map[name:Mark Smith  age:33  occupation:Jack of all trades]
-	// map[ age:42  occupation:Writer name:Douglas Adams]
-	// map[name:Methuselah  age:969  occupation:Patriarch]
+	// name:Mark Smith  age:33  occupation:Jack of all trades
+	// name:Douglas Adams  age:42  occupation:Writer
+	// name:Methuselah  age:969  occupation:Patriarch
 }
 
 func ExampleDictReader_ReadAll() {
@@ -56,9 +60,18 @@ Methuselah,969,Patriarch
 		log.Fatal(err)
 	}
 
-	fmt.Print(records)
+	headers := r.GetHeaderRow()
+
+	for _, record := range records {
+		fmt.Printf("%v:%v %v:%v %v:%v\n", headers[0], record[headers[0]],
+			headers[1], record[headers[1]],
+			headers[2], record[headers[2]])
+	}
+
 	// Output:
-	// [map[name:Mark Smith  age:33  occupation:Jack of all trades] map[name:Douglas Adams  age:42  occupation:Writer] map[name:Methuselah  age:969  occupation:Patriarch]]
+	// name:Mark Smith  age:33  occupation:Jack of all trades
+	// name:Douglas Adams  age:42  occupation:Writer
+	// name:Methuselah  age:969  occupation:Patriarch
 }
 
 func ExampleDictWriter() {
