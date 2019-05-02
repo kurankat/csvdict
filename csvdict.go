@@ -7,7 +7,6 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"os"
 	"strings"
 )
 
@@ -19,18 +18,17 @@ type DictReader struct {
 }
 
 // NewDictReader takes an io.Reader as an argument and returns a reference to a DictReader
-func NewDictReader(r io.Reader) *DictReader {
+func NewDictReader(r io.Reader) (dr *DictReader, err error) {
 	cr := csv.NewReader(r)
 	h, err := cr.Read()
 	if err != nil {
-		fmt.Println("I had trouble reading the header row. Is the file in the correct format?")
-		os.Exit(1)
+		return &DictReader{}, fmt.Errorf("problem reading CSV header row. Cannot create DictReader")
 	}
 
 	return &DictReader{
 		cReader: cr,
 		header:  h,
-	}
+	}, nil
 }
 
 // Read reads a single line of a CSV file and returns a map where each field is mapped to its header
